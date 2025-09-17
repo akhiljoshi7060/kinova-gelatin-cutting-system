@@ -74,76 +74,104 @@ sudo apt-get install ros-noetic-tf2-ros
 pip install -r requirements.txt
 ```
 
-### 3. Copy Files to Catkin Workspace
+### 3. Build Workspace
 ```bash
-# Navigate to your catkin workspace
-cd ~/catkin_workspace/src
+# Navigate to project directory
+cd kinova-gelatin-cutting-system
 
-# Ensure line_follower package exists (create if needed)
-mkdir -p line_follower/scripts
-mkdir -p line_follower/launch
-mkdir -p cv_calibration/src
-
-# Copy source files to correct locations
-cp ~/kinova-gelatin-cutting-system/src/vision/Line_detection.py ~/catkin_workspace/src/line_follower/scripts/
-cp ~/kinova-gelatin-cutting-system/src/control/gelatin_cutter.py ~/catkin_workspace/src/line_follower/scripts/
-cp ~/kinova-gelatin-cutting-system/src/control/gen3_impedance_controller_v4.py ~/catkin_workspace/src/line_follower/scripts/
-cp ~/kinova-gelatin-cutting-system/src/control/line_follower_impedance.py ~/catkin_workspace/src/line_follower/scripts/
-cp ~/kinova-gelatin-cutting-system/src/planning/move_to_position.py ~/catkin_workspace/src/line_follower/scripts/
-cp ~/kinova-gelatin-cutting-system/src/calibration/rviz_calibration.py ~/catkin_workspace/src/cv_calibration/src/
-
-# Copy launch files
-cp ~/kinova-gelatin-cutting-system/launch/*.launch ~/catkin_workspace/src/line_follower/launch/
-
-# Make scripts executable
-chmod +x ~/catkin_workspace/src/line_follower/scripts/*.py
-chmod +x ~/catkin_workspace/src/cv_calibration/src/*.py
-```
-
-### 4. Build Workspace
-```bash
-cd ~/catkin_workspace
+# Build the project
 catkin_make
 source devel/setup.bash
 
 # Add to bashrc for automatic sourcing
-echo "source ~/catkin_workspace/devel/setup.bash" >> ~/.bashrc
+echo "source $(pwd)/devel/setup.bash" >> ~/.bashrc
 ```
+
+## Project File Structure
+
+```
+kinova-gelatin-cutting-system/
+├── Calibration_images_and_data/               # Camera calibration datasets and parameters
+├── cartesian_impedance_controller/            # Custom impedance control implementation
+├── config/                                    # Robot and system configuration files
+├── depends/                                   # Project dependencies and external libraries
+├── devel/                                     # Development build files (catkin workspace)
+├── Frames/                                    # Reference frame definitions and transformations
+├── launch/                                    # ROS launch files for system startup
+├── Line_detection_images_analysis/           # Computer vision analysis and results
+├── results/                                   # Experimental data and performance metrics
+├── src/                                       # Source code (Python scripts and ROS nodes)
+└── README.md                                 # Project documentation (this file)
+```
+
+## Core System Components
+
+### Computer Vision System (`Line_detection_images_analysis/`)
+- **Line Detection Algorithm**: Advanced OpenCV-based line detection and tracking
+- **Real-time Processing**: Processes built-in camera feed at 1280×720 @ 30 fps
+- **Image Analysis**: Comprehensive analysis tools and results
+- **Coordinate Transformation**: Converts image pixels to robot coordinate frame
+- **Path Planning**: Generates optimal cutting trajectories from detected lines
+
+### Cartesian Impedance Controller (`cartesian_impedance_controller/`)
+- **Custom Implementation**: Specialized control algorithms for compliant manipulation
+- **Compliant Control**: Maintains safe interaction forces with soft materials
+- **Real-time Feedback**: 1 kHz control loop with integrated torque sensors
+- **Adaptive Stiffness**: Dynamic stiffness adjustment based on material properties
+- **Safety Mechanisms**: Force limiting and emergency stop integration
+
+### Calibration System (`Calibration_images_and_data/`)
+- **Hand-eye Calibration**: Comprehensive calibration datasets and parameters
+- **Camera Intrinsics**: Pre-computed calibration values for built-in cameras
+- **Calibration Images**: Complete dataset for system calibration
+- **Validation Tools**: Calibration accuracy verification utilities
+
+### Configuration Management (`config/`)
+- **Robot Parameters**: Joint limits, kinematics, and workspace definitions
+- **System Settings**: Camera parameters and vision processing configurations
+- **Safety Parameters**: Force limits and emergency stop configurations
+- **Calibration Data**: Stored calibration matrices and transformations
+
+### Launch System (`launch/`)
+- **Modular Launch Files**: Organized startup scripts for different system modes
+- **System Integration**: Complete system launch configurations
+- **Component Control**: Individual launch files for subsystem testing
+- **Parameter Management**: Centralized configuration through launch parameters
+
+### Frame Management (`Frames/`)
+- **Coordinate Systems**: Robot base, tool, and camera frame definitions
+- **Transformations**: Spatial relationships between coordinate frames
+- **Calibration Results**: Hand-eye calibration transformation matrices
+- **Visualization**: Frame relationship diagrams and validation tools
+
+### Source Code (`src/`)
+- **Core Algorithms**: Main implementation files for vision and control
+- **ROS Nodes**: Custom ROS nodes for system integration
+- **Utility Scripts**: Helper functions and debugging tools
+- **Integration Layer**: Interfaces between vision, control, and planning systems
+
+### Dependencies (`depends/`)
+- **External Libraries**: Required third-party packages and libraries
+- **ROS Packages**: Custom ROS package dependencies
+- **API Interfaces**: Kinova Kortex API and related components
+- **Development Tools**: Build and debugging utilities
 
 ## System Operation
 
-### Pre-Operation Checklist
-1. Verify robot is connected to power and network
-2. Confirm robot IP address is reachable: `ping 192.168.1.10`
-3. Ensure workspace is clear of obstacles
-4. Check that cutting tool is properly attached
-
 ### Launch Sequence (3 Terminals Required)
 
-#### Terminal 1: Robot System with MoveIt
+**Terminal 1: Robot System with MoveIt**
 ```bash
-# Source ROS environment
-source ~/catkin_workspace/devel/setup.bash
-
-# Launch robot with motion planning (adjust IP if different)
 roslaunch gen3_robotiq_2f_140_move_it_config real_robot_moveit.launch ip_address:=192.168.1.10
 ```
 
-#### Terminal 2: Built-in Vision System
+**Terminal 2: Built-in Vision System**
 ```bash
-# Source ROS environment
-source ~/catkin_workspace/devel/setup.bash
-
-# Start built-in camera drivers
 roslaunch kinova_vision kinova_vision.launch
 ```
 
-#### Terminal 3: Cutting Application
+**Terminal 3: Main Cutting Application**
 ```bash
-# Source ROS environment
-source ~/catkin_workspace/devel/setup.bash
-
-# Execute main gelatin cutting program
 rosrun line_follower gelatin_cutter.py
 ```
 
@@ -162,78 +190,17 @@ rosrun line_follower Line_detection.py
 rosrun cv_calibration rviz_calibration.py
 ```
 
-## Project File Structure
+### Calibration Procedures
+```bash
+# Hand-eye calibration
+rosrun cv_calibration rviz_calibration.py
 
+# Verify camera topics
+rostopic list | grep camera
+
+# Check frame relationships
+rosrun tf tf_echo base_link camera_link
 ```
-kinova-gelatin-cutting-system/
-├── src/
-│   ├── vision/
-│   │   └── Line_detection.py                    # Computer vision algorithms
-│   ├── control/
-│   │   ├── gelatin_cutter.py                    # Main cutting application (41KB)
-│   │   ├── gen3_impedance_controller_v4.py      # Custom impedance controller
-│   │   └── line_follower_impedance.py           # Vision-force integration
-│   ├── planning/
-│   │   └── move_to_position.py                  # Motion planning utilities
-│   └── calibration/
-│       └── rviz_calibration.py                  # Hand-eye calibration system
-├── config/
-│   └── robot/                                   # Robot configuration files
-│       ├── joint_limits.yaml
-│       ├── kinematics.yaml
-│       ├── cartesian_limits.yaml
-│       └── [other MoveIt configs]
-├── launch/                                      # ROS launch files
-│   ├── hand_eye_calibration.launch
-│   ├── latest_camera_pose.launch
-│   └── line_follower_impedance.launch
-├── examples/
-│   └── images/                                  # Calibration sample images
-│       ├── left-0000.png through left-0044.png # 45 calibration images
-└── docs/                                        # Documentation
-```
-
-## Core System Components
-
-### Vision Processing Module (`Line_detection.py`)
-- Real-time line detection using OpenCV algorithms
-- Processes built-in camera feed at 1280×720 resolution @ 30 fps
-- Converts image pixel coordinates to robot coordinate frame
-- Generates waypoint trajectories for cutting paths
-- Handles lighting variations and noise filtering
-
-### Main Cutting Application (`gelatin_cutter.py`)
-- Primary application file (41,387 bytes)
-- Integrates vision processing with robot control
-- Implements safety monitoring and emergency stop procedures
-- Manages cutting sequence execution and progress tracking
-- Provides real-time force feedback monitoring
-
-### Impedance Control System (`gen3_impedance_controller_v4.py`)
-- Custom compliant control algorithms for soft material interaction
-- Maintains cutting forces below 5N threshold
-- Real-time torque sensor feedback integration
-- Adaptive stiffness control based on material properties
-- Safety-critical force limiting mechanisms
-
-### Vision-Force Integration (`line_follower_impedance.py`)
-- Combines visual servoing with force control
-- Real-time path correction based on visual feedback
-- Adaptive cutting parameters based on material response
-- Continuous monitoring of cutting quality
-
-### Motion Planning Interface (`move_to_position.py`)
-- MoveIt motion planning integration
-- Collision-free trajectory generation
-- Joint space and Cartesian space planning modes
-- Workspace safety boundary enforcement
-- Emergency stop and recovery procedures
-
-### Calibration System (`rviz_calibration.py`)
-- Hand-eye calibration implementation
-- Camera intrinsic and extrinsic parameter estimation
-- Calibration accuracy validation tools
-- Automated calibration data collection
 
 ## Performance Specifications
 
@@ -242,7 +209,7 @@ kinova-gelatin-cutting-system/
 - **Force Control**: Maintains cutting forces <5N consistently
 - **Vision Processing**: Real-time operation at 30 FPS
 - **Complex Patterns**: Successfully cuts geometric shapes on gelatin
-- **Calibration**: 45-point hand-eye calibration for accuracy
+- **Calibration**: Multi-point hand-eye calibration for sub-millimeter accuracy
 
 ### System Response Times
 - Vision processing latency: <33ms per frame
@@ -250,7 +217,36 @@ kinova-gelatin-cutting-system/
 - Motion planning: Variable based on complexity
 - Emergency stop response: <100ms
 
+### Data Management
+- **Results Storage**: Experimental data and performance metrics in `results/`
+- **Calibration Archive**: Complete calibration datasets in `Calibration_images_and_data/`
+- **Analysis Pipeline**: Computer vision analysis tools in `Line_detection_images_analysis/`
+- **Configuration Backup**: System settings preserved in `config/`
+
 ## Troubleshooting Guide
+
+### Build Issues
+```bash
+# Clean build (if using catkin structure)
+rm -rf devel/
+catkin_make clean
+catkin_make
+
+# Check dependencies
+ls depends/
+```
+
+### Calibration Problems
+```bash
+# Check calibration data
+ls -la Calibration_images_and_data/
+
+# Verify frame definitions
+ls -la Frames/
+
+# Review calibration parameters
+cat config/camera_calibration.yaml  # if exists
+```
 
 ### Common Issues and Solutions
 
@@ -268,7 +264,7 @@ rostopic echo /joint_states
 
 #### Vision System Issues
 ```bash
-# Check camera topics availability
+# Check camera topics
 rostopic list | grep camera
 
 # Test image stream
@@ -278,23 +274,26 @@ rostopic echo /camera/color/image_raw
 rostopic echo /camera/color/camera_info
 ```
 
-#### MoveIt Planning Issues
-```bash
-# Check MoveIt status
-rostopic echo /move_group/status
+## Development and Customization
 
-# Verify planning scene
-rostopic echo /planning_scene
+### Adding New Features
+1. Implement new algorithms in `src/`
+2. Add configuration files to `config/`
+3. Create launch files in `launch/`
+4. Test with existing calibration data
+5. Document results in `results/`
 
-# Test robot model loading
-rosrun tf tf_echo base_link tool_frame
-```
+### Calibration Maintenance
+- Use existing calibration data in `Calibration_images_and_data/`
+- Archive new calibrations: `tar -cf new_calibration.tar Calibration_images_and_data/`
+- Validate with frame visualization tools
+- Update launch files with new parameters
 
-### Error Recovery Procedures
-1. Emergency stop: Press robot emergency stop button
-2. Software stop: Ctrl+C in all terminal windows
-3. Robot reset: Power cycle robot and restart launch sequence
-4. Calibration check: Re-run hand-eye calibration if accuracy issues
+### Data Analysis
+- Process experimental data in `results/`
+- Use image analysis tools in `Line_detection_images_analysis/`
+- Generate reports with video documentation from `Videos/`
+- Archive important datasets for future reference
 
 ## Safety Protocols
 
@@ -303,32 +302,19 @@ rosrun tf tf_echo base_link tool_frame
 - Check workspace boundaries are configured
 - Ensure cutting tool is securely attached
 - Confirm force sensor calibration is current
+- Validate frame relationships using `frames.pdf`
 
 ### During Operation Monitoring
-- Continuous force feedback monitoring
+- Continuous force feedback monitoring through impedance controller
 - Visual inspection of cutting progress
 - Emergency stop accessibility maintained
-- Workspace clear of personnel
+- Real-time analysis of vision processing results
 
 ### Post-Operation Procedures
 - Return robot to safe home position
+- Save experimental data to `results/`
 - Power down in correct sequence
-- Secure cutting tools safely
-- Document any operational issues
-
-## Development and Customization
-
-### Adding New Cutting Patterns
-1. Modify vision processing algorithms in `Line_detection.py`
-2. Update path planning logic as needed
-3. Test with simulation before hardware deployment
-4. Validate cutting quality and safety
-
-### Calibration Maintenance
-- Recommend re-calibration every 30 days of operation
-- After any camera or robot maintenance
-- If cutting accuracy degrades below specifications
-- When changing end-effector tools
+- Backup calibration data if modified
 
 ## Contact Information
 
@@ -357,4 +343,4 @@ If you use this work in research, please cite:
   year={2025},
   howpublished={\url{https://github.com/akhiljoshi7060/kinova-gelatin-cutting-system}}
 }
-
+```

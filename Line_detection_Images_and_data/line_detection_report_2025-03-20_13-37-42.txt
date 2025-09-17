@@ -1,0 +1,18 @@
+=== Line Detection Report ===
+Timestamp: 2025-03-20_13-37-42
+
+Detected Line Points: 611
+Number of Waypoints: 9
+
+Waypoint Details (Image Coordinates and Tangent Vectors):
+  Waypoint 1: (x=247, y=367) | Tangent: (tx=0.7682, ty=-0.6402)
+  Waypoint 2: (x=295, y=327) | Tangent: (tx=0.7515, ty=-0.6597)
+  Waypoint 3: (x=337, y=288) | Tangent: (tx=0.6608, ty=-0.7506)
+  Waypoint 4: (x=376, y=235) | Tangent: (tx=-0.1366, ty=-0.9906)
+  Waypoint 5: (x=325, y=201) | Tangent: (tx=-0.8302, ty=-0.5574)
+  Waypoint 6: (x=236, y=141) | Tangent: (tx=-0.6123, ty=-0.7906)
+  Waypoint 7: (x=246, y=99) | Tangent: (tx=0.5398, ty=-0.8418)
+  Waypoint 8: (x=295, y=49) | Tangent: (tx=0.6886, ty=-0.7252)
+  Waypoint 9: (x=340, y=0) | Tangent: (tx=0.6764, ty=-0.7365)
+
+Advanced polynomial fitting was not used. (Fallback approach applied.)
