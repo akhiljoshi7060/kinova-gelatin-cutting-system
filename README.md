@@ -114,6 +114,7 @@ kinova-gelatin-cutting-system/
 - **Path Planning**: Generates optimal cutting trajectories from detected lines
 
 ### Cartesian Impedance Controller (`cartesian_impedance_controller/`)
+- **Based on Research**: Implementation inspired by Mayr & Salt-Ducaju (2024) C++ Cartesian Impedance Controller
 - **Custom Implementation**: Specialized control algorithms for compliant manipulation
 - **Compliant Control**: Maintains safe interaction forces with soft materials
 - **Real-time Feedback**: 1 kHz control loop with integrated torque sensors
@@ -328,19 +329,49 @@ This project is licensed under the MIT License - see the LICENSE file for comple
 
 ## Acknowledgments
 
-- Kinova Robotics for Gen3 platform and built-in vision system
+- **Kinova Robotics** for Gen3 platform, built-in vision system, and ROS integration
+  - Repository: [https://github.com/kinovarobotics](https://github.com/kinovarobotics)
+  - Kinova Gen3 ROS packages and SDK
+- **Cartesian Impedance Controller** implementation based on:
+  - Mayr, M. & Salt-Ducaju, J.M. (2024). A C++ Implementation of a Cartesian Impedance Controller for Robotic Manipulators. *Journal of Open Source Software*, 9(93), 5194.
 - Intel RealSense team for depth sensing technology
 - MoveIt community for motion planning framework
 - OpenCV contributors for computer vision libraries
+- ROS community for robotics middleware and tools
 
 ## Citation
 
 If you use this work in research, please cite:
+
+### This Work
 ```bibtex
 @misc{joshi2025kinova_gelatin_cutting,
   title={Vision-Guided Gelatin Cutting with Kinova Gen3 7-DOF Robotic Arm},
   author={Joshi, Akhil},
   year={2025},
   howpublished={\url{https://github.com/akhiljoshi7060/kinova-gelatin-cutting-system}}
+}
+```
+
+### Dependencies and References
+```bibtex
+@article{mayr2024cartesian,
+  doi = {10.21105/joss.05194},
+  url = {https://doi.org/10.21105/joss.05194},
+  year = {2024},
+  publisher = {The Open Journal},
+  volume = {9},
+  number = {93},
+  pages = {5194},
+  author = {Matthias Mayr and Julian M. Salt-Ducaju},
+  title = {A C++ Implementation of a Cartesian Impedance Controller for Robotic Manipulators},
+  journal = {Journal of Open Source Software}
+}
+
+@misc{kinova_robotics_ros,
+  title = {Kinova Robotics ROS Packages},
+  author = {Kinova Robotics},
+  howpublished = {\url{https://github.com/kinovarobotics}},
+  note = {Accessed: 2025}
 }
 ```
