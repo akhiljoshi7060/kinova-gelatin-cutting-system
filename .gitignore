@@ -1,0 +1,24 @@
+# Build directories
+build/
+devel/
+install/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# ROS
+*.bag
+
+# IDE
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Large data files (optional)
+*.mp4
+*.avi

@@ -1,0 +1,4 @@
+estimated_camera_distance: 0.52
+calibration_offset_x: -0.05
+calibration_offset_y: -0.05
+scale_factor: 1.0
