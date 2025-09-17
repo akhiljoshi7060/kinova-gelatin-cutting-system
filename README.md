@@ -346,3 +346,14 @@ This project is licensed under the MIT License - see the LICENSE file for comple
 - Intel RealSense team for depth sensing technology
 - MoveIt community for motion planning framework
 - OpenCV contributors for computer vision libraries
+
+## Citation
+
+If you use this work in research, please cite:
+```bibtex
+@misc{joshi2025kinova_gelatin_cutting,
+  title={Vision-Guided Gelatin Cutting with Kinova Gen3 7-DOF Robotic Arm},
+  author={Joshi, Akhil},
+  year={2025},
+  howpublished={\url{https://github.com/akhiljoshi7060/kinova-gelatin-cutting-system}}
+}
