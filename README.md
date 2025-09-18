@@ -101,7 +101,7 @@ kinova-gelatin-cutting-system/
 ├── Line_detection_images_analysis/           # Computer vision analysis and results
 ├── results/                                   # Experimental data and performance metrics
 ├── src/                                       # Source code (Python scripts and ROS nodes)
-└── README.md                                 # Project documentation (this file)
+└── README.md                                 # Project documentation 
 ```
 
 ## Core System Components
