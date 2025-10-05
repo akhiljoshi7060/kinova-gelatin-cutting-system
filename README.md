@@ -6,7 +6,6 @@ A robotics research project implementing vision-guided manipulation for precisio
 
 This project demonstrates:
 - Real-time computer vision for line detection and path planning
-- Compliant impedance control for safe interaction with soft materials
 - Hand-eye calibration for accurate vision-robot coordination
 - Integration of built-in RGB+Depth cameras with robotic control
 
@@ -16,7 +15,6 @@ This project demonstrates:
 - **Model**: Kinova Gen3 7-DOF robotic arm
 - **Specifications**: 902mm reach, 4kg payload capacity
 - **End-effector**: Robotiq 2F-140 gripper with custom cutting tool attachment
-- **Control**: 1 kHz closed-loop control with integrated torque sensors
 - **Interface**: Ethernet connection to robot base
 
 ### Built-in Vision System
@@ -92,7 +90,6 @@ echo "source $(pwd)/devel/setup.bash" >> ~/.bashrc
 ```
 kinova-gelatin-cutting-system/
 ├── Calibration_images_and_data/               # Camera calibration datasets and parameters
-├── cartesian_impedance_controller/            # Custom impedance control implementation
 ├── config/                                    # Robot and system configuration files
 ├── depends/                                   # Project dependencies and external libraries
 ├── devel/                                     # Development build files (catkin workspace)
@@ -112,15 +109,7 @@ kinova-gelatin-cutting-system/
 - **Image Analysis**: Comprehensive analysis tools and results
 - **Coordinate Transformation**: Converts image pixels to robot coordinate frame
 - **Path Planning**: Generates optimal cutting trajectories from detected lines
-
-### Cartesian Impedance Controller (`cartesian_impedance_controller/`)
-- **Based on Research**: Implementation inspired by Mayr & Salt-Ducaju (2024) C++ Cartesian Impedance Controller
-- **Custom Implementation**: Specialized control algorithms for compliant manipulation
-- **Compliant Control**: Maintains safe interaction forces with soft materials
-- **Real-time Feedback**: 1 kHz control loop with integrated torque sensors
-- **Adaptive Stiffness**: Dynamic stiffness adjustment based on material properties
-- **Safety Mechanisms**: Force limiting and emergency stop integration
-
+  
 ### Calibration System (`Calibration_images_and_data/`)
 - **Hand-eye Calibration**: Comprehensive calibration datasets and parameters
 - **Camera Intrinsics**: Pre-computed calibration values for built-in cameras
@@ -323,17 +312,11 @@ rostopic echo /camera/color/camera_info
 - **GitHub**: [@akhiljoshi7060](https://github.com/akhiljoshi7060)
 - **Email**: akhiljoshi436@gmail.com
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for complete details.
-
 ## Acknowledgments
 
 - **Kinova Robotics** for Gen3 platform, built-in vision system, and ROS integration
-  - Repository: [https://github.com/kinovarobotics](https://github.com/kinovarobotics)
-  - Kinova Gen3 ROS packages and SDK
-- **Cartesian Impedance Controller** implementation based on:
-  - Mayr, M. & Salt-Ducaju, J.M. (2024). A C++ Implementation of a Cartesian Impedance Controller for Robotic Manipulators. *Journal of Open Source Software*, 9(93), 5194.
+- Repository: [https://github.com/kinovarobotics](https://github.com/kinovarobotics)
+- Kinova Gen3 ROS packages and SDK
 - Intel RealSense team for depth sensing technology
 - MoveIt community for motion planning framework
 - OpenCV contributors for computer vision libraries
@@ -355,18 +338,6 @@ If you use this work in research, please cite:
 
 ### Dependencies and References
 ```bibtex
-@article{mayr2024cartesian,
-  doi = {10.21105/joss.05194},
-  url = {https://doi.org/10.21105/joss.05194},
-  year = {2024},
-  publisher = {The Open Journal},
-  volume = {9},
-  number = {93},
-  pages = {5194},
-  author = {Matthias Mayr and Julian M. Salt-Ducaju},
-  title = {A C++ Implementation of a Cartesian Impedance Controller for Robotic Manipulators},
-  journal = {Journal of Open Source Software}
-}
 
 @misc{kinova_robotics_ros,
   title = {Kinova Robotics ROS Packages},
