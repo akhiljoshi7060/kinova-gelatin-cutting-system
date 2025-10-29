@@ -162,7 +162,7 @@ roslaunch kinova_vision kinova_vision.launch
 
 **Terminal 3: Main Cutting Application**
 ```bash
-rosrun line_follower gelatine_cutter.py
+rosrun line_follower gelatin_cutter.py
 ```
 
 ### Alternative Launch Commands
